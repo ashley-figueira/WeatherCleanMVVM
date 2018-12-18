@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion Versions.compile_sdk
+
+    defaultConfig {
+        minSdkVersion Versions.min_sdk
+        targetSdkVersion Versions.target_sdk
+        versionCode Versions.app_version_code
+        versionName Versions.app_version_name
+        buildConfigField "String", "ApiKey", apiKey
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation Dependencies.kotlin
+
+    // A lot of these need to be api so that Dagger can build the dependencies in the app module.
+    api project(":domain")
+
+    api Dependencies.joda
+    api Dependencies.okhttp
+    api Dependencies.okhttp_logging
+    api Dependencies.rxjava
+    api Dependencies.retrofit
+    api Dependencies.retrofit_gson_coverter
+    api Dependencies.retrofit_rxjava_adapter
+    api Dependencies.retrofit_rxjava2_adapter
+    api Dependencies.gson
+    api Dependencies.timber
+
+    api Dependencies.andoridx_arch_room_runtime
+    api Dependencies.andoridx_arch_room_rxjava
+    kapt Dependencies.andoridx_arch_room_compiler
+
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
+    kapt Dependencies.dagger_processor
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_inline
+    testImplementation Dependencies.mockito_kotlin
+    testImplementation Dependencies.kotlin_test_runtime
+    testImplementation Dependencies.kotlin_test_reflect
+    testImplementation Dependencies.kotlin_test_junit
+}

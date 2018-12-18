@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Weather</string>
+
+    <string name="main_screen_no_weather_item_message">No weather found!</string>
+    <string name="main_screen_cardview_condition_label">Condition :</string>
+    <string name="main_screen_cardview_wind_label">Wind :</string>
+    <string name="main_screen_cardview_wind_direction_label">Wind Direction :</string>
+    <string name="main_screen_cardview_last_updated_label">Last updated on:</string>
+    <string name="main_screen_no_internet_connection_message">Check your connectivity and try again!</string>
+    <string name="main_screen_general_error_message">An error occured! Try again later!</string>
+
+    <string name="main_screen_error_deleting">Error deleting weather: </string>
+    <string name="main_screen_error_saving">Error saving weather!</string>
+    <string name="main_screen_error_updating">Error updating weather!</string>
+    <string name="main_screen_error_loading">No weather has been added! Add a weather!</string>
+
+    <string name="main_screen_progress_loading_label">Loading ...</string>
+    <string name="main_screen_empty_message">Sorry! You currently have no weather information to show!</string>
+    <string name="main_screen_no_wifi">You have no internet connection! Please turn on wifi or click here.</string>
+    <string name="main_screen_unknown_error">Sorry something went wrong! Please try again!</string>
+    <string name="main_screen_location_permission_message">Please grant location permissions to access weather for your current location</string>
+
+    <string name="north">North</string>
+    <string name="north_east">North East</string>
+    <string name="east">East</string>
+    <string name="south_east">South East</string>
+    <string name="unknown">Unknown</string>
+    <string name="north_west">North West</string>
+    <string name="west">West</string>
+    <string name="south">South</string>
+    <string name="south_west">South West</string>
+</resources>

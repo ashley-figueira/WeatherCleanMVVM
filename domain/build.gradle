@@ -1,0 +1,19 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation Dependencies.kotlin
+    implementation Dependencies.rxjava
+    implementation Dependencies.joda
+    implementation Dependencies.javaxAnnotation
+    implementation Dependencies.javaxInject
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_inline
+    testImplementation Dependencies.mockito_kotlin
+    testImplementation Dependencies.kotlin_test_runtime
+    testImplementation Dependencies.kotlin_test_reflect
+    testImplementation Dependencies.kotlin_test_junit
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"

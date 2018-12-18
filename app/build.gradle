@@ -1,0 +1,101 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+androidExtensions {
+    experimental = true
+}
+
+android {
+    compileSdkVersion Versions.compile_sdk
+    defaultConfig {
+        applicationId "com.ashley.weathercleanmvvm"
+        minSdkVersion Versions.min_sdk
+        targetSdkVersion Versions.target_sdk
+        versionCode Versions.app_version_code
+        versionName Versions.app_version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":data")
+
+    kapt 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+    annotationProcessor 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+
+    implementation Dependencies.kotlin
+
+    implementation Dependencies.material_design
+    implementation Dependencies.androidx_card_view
+    implementation Dependencies.androidx_multidex
+    implementation Dependencies.androidx_constraint_layout
+    implementation Dependencies.androidx_appcompat
+
+    //arch
+    implementation Dependencies.andoridx_arch_viewModel
+    implementation Dependencies.andoridx_arch_extensions
+    implementation Dependencies.andoridx_arch_liveData
+    implementation Dependencies.andoridx_arch_java8
+    implementation Dependencies.andoridx_arch_room_runtime
+    implementation Dependencies.andoridx_arch_room_rxjava
+    kapt Dependencies.andoridx_arch_room_compiler
+
+    //Dagger
+    implementation Dependencies.dagger
+    implementation Dependencies.dagger_android
+    implementation Dependencies.dagger_support
+    kapt Dependencies.dagger_compiler
+    kapt Dependencies.dagger_processor
+
+    //Network
+    implementation Dependencies.okhttp
+    implementation Dependencies.okhttp_logging
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson_coverter
+    implementation Dependencies.retrofit_rxjava_adapter
+    implementation Dependencies.gson
+
+    //rx
+    implementation Dependencies.rxjava
+    implementation Dependencies.rxandroid
+
+    //Glide
+    implementation Dependencies.glide
+    implementation Dependencies.glide_okhttp_integration
+
+    //Debug tools
+    implementation Dependencies.timber
+
+    //others
+    implementation Dependencies.groupie
+    implementation Dependencies.groupie_extensions
+    implementation Dependencies.easypermissions
+    implementation Dependencies.play_services_location
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_inline
+    testImplementation Dependencies.mockito_kotlin
+    testImplementation Dependencies.kotlin_test_runtime
+    testImplementation Dependencies.kotlin_test_reflect
+    testImplementation Dependencies.kotlin_test_junit
+
+}
