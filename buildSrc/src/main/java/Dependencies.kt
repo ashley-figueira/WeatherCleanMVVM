@@ -36,6 +36,7 @@ object Versions {
 
     // Logging
     const val timber = "4.7.0"
+    const val stetho = "1.5.0"
 
     // TEST
     const val junit = "4.12"
@@ -111,6 +112,7 @@ object Dependencies {
 
     // Logging
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+    const val stetho = "com.facebook.stetho:stetho:${Versions.stetho}"
 
     // TEST
     const val junit = "junit:junit:${Versions.junit}"
