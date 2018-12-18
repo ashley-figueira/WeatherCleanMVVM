@@ -124,6 +124,7 @@ object Dependencies {
     const val mockito_inline = "org.mockito:mockito-inline:${Versions.mockito}"
     const val mockito_kotlin = "com.nhaarman:mockito-kotlin:${Versions.mockito_kotlin}"
 
-    const val support_test_runner = "androidx.test:runner:${Versions.support_test_runner}"
+    const val support_test_runner = "androidx.test.ext:junit:1.0.0"
+    const val support_test_rules = "androidx.test:rules:${Versions.support_test_runner}"
     const val support_espresso = "androidx.test.espresso:espresso-core:${Versions.support_espresso}"
 }

@@ -62,4 +62,10 @@ dependencies {
     testImplementation Dependencies.kotlin_test_runtime
     testImplementation Dependencies.kotlin_test_reflect
     testImplementation Dependencies.kotlin_test_junit
+
+    androidTestImplementation Dependencies.junit
+    androidTestImplementation Dependencies.andoridx_arch_testing
+    androidTestImplementation Dependencies.andoridx_arch_room_testing
+    androidTestImplementation Dependencies.support_test_runner
+    androidTestImplementation Dependencies.support_test_rules
 }

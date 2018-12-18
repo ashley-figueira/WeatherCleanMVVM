@@ -19,7 +19,7 @@ class WeatherRepositoryImpl @Inject constructor(
 ): WeatherRepository {
 
     override fun getWeatherByCoords(latitude: Double, longitude: Double): Single<WResult<WeatherEntity>> {
-        return weatherLocalRepositoryImpl.getWeatherByCoords(latitude, longitude)
+        return weatherLocalRepositoryImpl.getWeatherByCoords("%.2f".format(latitude).toDouble(), "%.2f".format(longitude).toDouble())
             .flatMap { result ->
                 if (result is WResult.Success) {
                     result.data.lastUpdatedAt?.let {
