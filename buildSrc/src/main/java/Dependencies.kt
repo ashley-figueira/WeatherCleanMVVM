@@ -29,6 +29,7 @@ object Versions {
     const val gson = "2.8.2"
     const val dagger = "2.19"
     const val glide = "3.7.0"
+    const val picasso = "2.71828"
     const val joda = "2.10.1"
     const val groupie = "2.1.0"
     const val easypermissions = "1.3.0"
@@ -99,6 +100,7 @@ object Dependencies {
     //glide
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glide_okhttp_integration = "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar"
+    const val picasso = "com.squareup.picasso:picasso:${Versions.picasso}"
 
     //others
     const val joda = "joda-time:joda-time:${Versions.joda}"

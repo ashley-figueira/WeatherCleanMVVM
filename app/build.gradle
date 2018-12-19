@@ -82,6 +82,9 @@ dependencies {
     implementation Dependencies.glide
     implementation Dependencies.glide_okhttp_integration
 
+    //Picasso
+    implementation Dependencies.picasso
+
     //Debug tools
     implementation Dependencies.timber
 

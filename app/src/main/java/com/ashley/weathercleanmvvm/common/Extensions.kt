@@ -3,6 +3,8 @@ package com.ashley.weathercleanmvvm.common
 import android.view.View
 import com.ashley.domain.weather.WindDirection
 import com.ashley.weathercleanmvvm.R
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 fun View.gone() { this.visibility = View.GONE }
 
@@ -22,3 +24,7 @@ fun WindDirection.getStringRes(): Int {
         WindDirection.NorthWest -> R.string.north_west
     }
 }
+
+fun DateTime.getFormattedDate(): String = DateTimeFormat.forPattern(DATE_FORMAT).print(this)
+
+private const val DATE_FORMAT = "MMMM dd yyyy HH:mm"

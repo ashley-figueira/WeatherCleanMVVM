@@ -9,6 +9,7 @@ import com.ashley.weathercleanmvvm.R
 import com.ashley.weathercleanmvvm.base.BaseActivity
 import com.ashley.weathercleanmvvm.base.ScreenState
 import com.ashley.weathercleanmvvm.common.FusedLocationHandler.Companion.RC_LOCATION
+import com.ashley.weathercleanmvvm.common.getFormattedDate
 import com.ashley.weathercleanmvvm.common.getStringRes
 import com.ashley.weathercleanmvvm.common.visible
 import com.ashley.weathercleanmvvm.common.visibleUnless
@@ -39,9 +40,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), MainNav
                 is ScreenState.HasData -> { weatherCardView.visible()
                     weatherTemp.text = screenState.data.temperature.toString()
                     weatherCondition.text = screenState.data.condition
-                    weatherWind.text = screenState.data.wind.toString()
+                    weatherWind.text = "${screenState.data.wind} m/s"
                     weatherCity.text = screenState.data.city
                     weatherWindDirection.text = getString(screenState.data.windDirection.getStringRes())
+                    screenState.data.lastUpdatedAt?.let { weatherUpdatedOn.text = it.getFormattedDate() }
                     Glide.with(this).load(screenState.data.iconUrl).into(weatherIcon)
                 }
             }

@@ -1,5 +1,6 @@
 package com.ashley.data.weather
 
+import com.ashley.data.DataConfig
 import com.ashley.domain.common.Mapper
 import com.ashley.domain.weather.WeatherEntity
 import com.ashley.domain.weather.WindDirection
@@ -17,7 +18,7 @@ class WeatherEntityMapper @Inject constructor() : Mapper<WeatherResponse, Weathe
         val condition = from.weather?.first()?.main ?: throw IllegalArgumentException("Condition does not exist!")
         val wind = from.wind?.speed ?: throw IllegalArgumentException("Wind speed does not exist!")
         val windDirection = from.wind?.deg ?: throw IllegalArgumentException("Wind direction does not exist!")
-        val iconUrl = from.weather?.first()?.icon ?: ""
+        val iconUrl =  from.weather?.first()?.icon?.let { "${DataConfig.WEATHER_ICON_BASE_URL}$it.png" } ?:  ""
         val lastUpdatedAt = from.dt?.let { DateTime(it.toLong() * 1000L) }
 
         return WeatherEntity(
