@@ -41,7 +41,7 @@ class MainViewModel(
                             is WResult.Success -> _screenState.value = ScreenState.HasData(result.data)
                             is WResult.Failure -> handleError(result.error)
                         }
-                    }, { throwable -> Timber.e(throwable) })
+                    }, { throwable -> Timber.e(throwable) }).addToComposite()
             })
         } catch (error: WeatherExceptions.LocationRequestNotGrantedException) {
             mNavigator.requestPermissions(locationHandler.locationPermissions())
