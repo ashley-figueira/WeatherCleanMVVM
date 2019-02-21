@@ -14,10 +14,4 @@ class GetWeatherUseCase @Inject constructor(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
     }
-
-//    fun getWeatherByCity(city: String): Single<WResult<WeatherEntity>> {
-//        return weatherRepository.getWeatherByCity(city)
-//            .subscribeOn(schedulerProvider.io())
-//            .observeOn(schedulerProvider.ui())
-//    }
 }

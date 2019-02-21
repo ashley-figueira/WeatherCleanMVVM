@@ -40,19 +40,6 @@ class GetWeatherUseCaseTest {
         verify(weatherRepository).getWeatherByCoords(anyDouble(), anyDouble())
     }
 
-//    @Test
-//    fun testGetWeatherByCity_Success() {
-//        whenever(weatherRepository.getWeatherByCity(anyString()))
-//                .thenReturn(Single.just(WResult.Success(MockDomainHelper.getWeatherEntity())))
-//
-//        val testObserver = getWeatherUseCase.getWeatherByCity("London").test()
-//        testObserver.awaitTerminalEvent()
-//        testObserver.assertNoErrors()
-//        testObserver.assertValue { value -> value is WResult.Success }
-//
-//        verify(weatherRepository).getWeatherByCity(anyString())
-//    }
-
     @Test
     fun testGetWeatherByCoords_Failure() {
         whenever(weatherRepository.getWeatherByCoords(anyDouble(), anyDouble()))
@@ -65,17 +52,4 @@ class GetWeatherUseCaseTest {
 
         verify(weatherRepository).getWeatherByCoords(anyDouble(), anyDouble())
     }
-
-//    @Test
-//    fun testGetWeatherByCity_Failure() {
-//        whenever(weatherRepository.getWeatherByCity(anyString()))
-//                .thenReturn(Single.just(WResult.Failure(WError.Offline(SocketException()))))
-//
-//        val testObserver = getWeatherUseCase.getWeatherByCity("London").test()
-//        testObserver.awaitTerminalEvent()
-//        testObserver.assertNoErrors()
-//        testObserver.assertValue { value -> value is WResult.Failure }
-//
-//        verify(weatherRepository).getWeatherByCity(anyString())
-//    }
 }

@@ -27,18 +27,6 @@ class WeatherRemoteRepositoryImplTest {
     }
 
     @Test
-    fun testGetWeatherByCity() {
-        whenever(weatherService.getWeatherByCity(anyString(), anyString())).thenReturn(Single.just(weatherResponse))
-
-        val testObserver = weatherRemoteRepositoryImpl.getWeatherByCity("London").test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValueCount(1)
-
-        verify(weatherService).getWeatherByCity(anyString(), anyString())
-    }
-
-    @Test
     fun testGetWeatherByCoords() {
         whenever(weatherService.getWeatherByCoords(anyDouble(), anyDouble(), anyString())).thenReturn(Single.just(weatherResponse))
 

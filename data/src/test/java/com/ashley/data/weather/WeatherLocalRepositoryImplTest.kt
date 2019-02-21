@@ -66,10 +66,10 @@ class WeatherLocalRepositoryImplTest {
     }
 
     @Test
-    fun testGetWeatherByCity() {
-        whenever(weatherDao.getWeatherByCity(anyString())).thenReturn(Single.just(weatherResponse))
+    fun testGetWeatherByCoords() {
+        whenever(weatherDao.getWeatherByCoords(anyDouble(), anyDouble())).thenReturn(Single.just(weatherResponse))
 
-        val testObserver = weatherLocalRepositoryImpl.getWeatherByCity("London").test()
+        val testObserver = weatherLocalRepositoryImpl.getWeatherByCoords(0.0, 55.55).test()
         testObserver.awaitTerminalEvent()
         testObserver.assertNoErrors()
         testObserver.assertValue { value -> value is WResult.Success }
@@ -83,15 +83,5 @@ class WeatherLocalRepositoryImplTest {
         assertEquals(value.data.lastUpdatedAt?.monthOfYear, 1)
         assertEquals(value.data.lastUpdatedAt?.year, 2017)
         assertEquals(value.data.windDirection, WindDirection.NorthEast)
-    }
-
-    @Test
-    fun testGetWeatherByCoords() {
-        whenever(weatherDao.getWeatherByCoords(anyDouble(), anyDouble())).thenReturn(Single.just(weatherResponse))
-
-        val testObserver = weatherLocalRepositoryImpl.getWeatherByCoords(0.0, 55.55).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValue { value -> value is WResult.Success }
     }
 }

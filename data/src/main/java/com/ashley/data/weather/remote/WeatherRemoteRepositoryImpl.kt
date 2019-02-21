@@ -8,10 +8,6 @@ class WeatherRemoteRepositoryImpl @Inject constructor(
     private val weatherService: WeatherService
 ): WeatherRemoteRepository {
 
-    override fun getWeatherByCity(city: String): Single<WeatherResponse> {
-        return weatherService.getWeatherByCity(city)
-    }
-
     override fun getWeatherByCoords(latitude: Double, longitude: Double): Single<WeatherResponse> {
         return weatherService.getWeatherByCoords(latitude, longitude)
     }

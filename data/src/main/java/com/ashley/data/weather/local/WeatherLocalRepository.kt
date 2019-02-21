@@ -7,8 +7,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 interface WeatherLocalRepository {
-    fun getWeatherByCity(city: String): Single<WResult<WeatherEntity>>
-
     fun getWeatherByCoords(latitude: Double, longitude: Double): Single<WResult<WeatherEntity>>
 
     fun insertWeather(weather: WeatherResponse): Completable

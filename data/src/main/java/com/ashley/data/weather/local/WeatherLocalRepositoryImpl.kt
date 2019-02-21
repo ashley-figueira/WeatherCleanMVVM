@@ -27,12 +27,6 @@ class WeatherLocalRepositoryImpl @Inject constructor(
         return weatherDao.update(weather)
     }
 
-    override fun getWeatherByCity(city: String): Single<WResult<WeatherEntity>> {
-        return weatherDao.getWeatherByCity(city)
-            .map { WResult.Success(weatherEntityMapper.mapFrom(it)) as WResult<WeatherEntity> }
-            .onErrorReturn { WResult.Failure(errorMapper.mapFrom(it)) }
-    }
-
     override fun getWeatherByCoords(latitude: Double, longitude: Double): Single<WResult<WeatherEntity>> {
         return weatherDao.getWeatherByCoords(latitude, longitude)
             .map { WResult.Success(weatherEntityMapper.mapFrom(it)) as WResult<WeatherEntity> }
