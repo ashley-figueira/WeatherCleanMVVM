@@ -9,6 +9,8 @@ data class WeatherEntity(
     val condition: String,
     val wind: Double,
     val windDirection: WindDirection,
+    val latitude: Double,
+    val longitude: Double,
     val iconUrl: String,
-    val lastUpdatedAt: DateTime?
+    val lastUpdatedAt: DateTime
 )

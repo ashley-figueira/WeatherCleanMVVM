@@ -1,7 +1,6 @@
 package com.ashley.data.weather.local
 
 import androidx.room.*
-import com.ashley.data.weather.WeatherResponse
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -9,17 +8,17 @@ import io.reactivex.Single
 interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWeather(weather: WeatherResponse): Completable
+    fun insertWeather(weather: WeatherRoomEntity): Completable
 
     @Query("SELECT * from Weather where city = :city")
-    fun getWeatherByCity(city: String): Single<WeatherResponse>
+    fun getWeatherByCity(city: String): Single<WeatherRoomEntity>
 
     @Query("SELECT * from Weather where lat = :lat AND lon = :lon")
-    fun getWeatherByCoords(lat: Double, lon: Double): Single<WeatherResponse>
+    fun getWeatherByCoords(lat: Double, lon: Double): Single<WeatherRoomEntity>
 
     @Update
-    fun update(weather: WeatherResponse): Completable
+    fun update(weather: WeatherRoomEntity): Completable
 
     @Delete
-    fun delete(weather: WeatherResponse): Completable
+    fun delete(weather: WeatherRoomEntity): Completable
 }

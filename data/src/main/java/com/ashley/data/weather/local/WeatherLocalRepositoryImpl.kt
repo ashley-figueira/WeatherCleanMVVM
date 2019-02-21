@@ -15,15 +15,15 @@ class WeatherLocalRepositoryImpl @Inject constructor(
     private val errorMapper: ErrorMapper
 ): WeatherLocalRepository {
 
-    override fun insertWeather(weather: WeatherResponse): Completable {
+    override fun insertWeather(weather: WeatherRoomEntity): Completable {
         return weatherDao.insertWeather(weather)
     }
 
-    override fun deleteWeather(weather: WeatherResponse): Completable {
+    override fun deleteWeather(weather: WeatherRoomEntity): Completable {
         return weatherDao.delete(weather)
     }
 
-    override fun updateWeather(weather: WeatherResponse): Completable {
+    override fun updateWeather(weather: WeatherRoomEntity): Completable {
         return weatherDao.update(weather)
     }
 

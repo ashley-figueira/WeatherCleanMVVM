@@ -38,13 +38,19 @@ class WeatherRepositoryImplTest {
     fun testGetWeatherByCoords_WeHaveWeatherInDb() {
         whenever(weatherLocalRepository.getWeatherByCoords(anyDouble(), anyDouble()))
                 .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
+        whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
+                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
 
         val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
         testObserver.awaitTerminalEvent()
         testObserver.assertNoErrors()
+        testObserver.assertValueCount(1) //Only database values where emitted
         testObserver.assertValue { value -> value is WResult.Success }
 
         verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(weatherRemoteRepository).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(weatherLocalRepository, never()).insertWeather(any()) //This is proof that it didnt go to network
+
 
     }
 
@@ -55,13 +61,14 @@ class WeatherRepositoryImplTest {
                 .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity(DateTime(2018, 12, 1,0,0)))))
 
         whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(MockDataHelper.getWeatherResponse()))
+                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
 
         whenever(weatherLocalRepository.insertWeather(any())).thenReturn(Completable.complete())
 
         val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
         testObserver.awaitTerminalEvent()
         testObserver.assertNoErrors()
+        testObserver.assertValueCount(1) //Only network values where emitted
         testObserver.assertValue { value -> value is WResult.Success }
 
         verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())
@@ -76,13 +83,14 @@ class WeatherRepositoryImplTest {
                 .thenReturn(Single.just(WResult.Failure(WError.NoWeatherInDatabase(EmptyResultSetException("No weather in database!")))))
 
         whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(MockDataHelper.getWeatherResponse()))
+                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
 
         whenever(weatherLocalRepository.insertWeather(any())).thenReturn(Completable.complete())
 
         val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
         testObserver.awaitTerminalEvent()
         testObserver.assertNoErrors()
+        testObserver.assertValueCount(1) //Only network values where emitted
         testObserver.assertValue { value -> value is WResult.Success }
 
         verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())

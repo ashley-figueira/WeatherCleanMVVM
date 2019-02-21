@@ -1,6 +1,7 @@
 package com.ashley.data.weather
 
 import com.ashley.data.DataConfig
+import com.ashley.data.weather.local.WeatherRoomEntity
 import com.ashley.domain.common.Mapper
 import com.ashley.domain.weather.WeatherEntity
 import com.ashley.domain.weather.WindDirection
@@ -19,7 +20,9 @@ class WeatherEntityMapper @Inject constructor() : Mapper<WeatherResponse, Weathe
         val wind = from.wind?.speed ?: throw IllegalArgumentException("Wind speed does not exist!")
         val windDirection = from.wind?.deg ?: throw IllegalArgumentException("Wind direction does not exist!")
         val iconUrl =  from.weather?.first()?.icon?.let { "${DataConfig.WEATHER_ICON_BASE_URL}$it.png" } ?:  ""
-        val lastUpdatedAt = from.dt?.let { DateTime(it.toLong() * 1000L) }
+        val lastUpdatedAt = from.dt?.let { DateTime(it.toLong() * 1000L) } ?: throw IllegalArgumentException("Last updated info not available!")
+        val latitude = from.coord?.lat ?: throw IllegalArgumentException("Weather coordinates does not exist!")
+        val longitude = from.coord?.lon ?: throw IllegalArgumentException("Weather coordinates does not exist!")
 
         return WeatherEntity(
             id.toLong(),
@@ -28,11 +31,42 @@ class WeatherEntityMapper @Inject constructor() : Mapper<WeatherResponse, Weathe
             condition,
             wind,
             convertDegreesToDirection(windDirection),
+            latitude,
+            longitude,
             iconUrl,
             lastUpdatedAt
         )
     }
 
+    fun mapFrom(from: WeatherRoomEntity): WeatherEntity {
+        return WeatherEntity(
+            from.id,
+            from.city,
+            from.temperature,
+            from.condition,
+            from.wind,
+            mapDirection(from.windDirection),
+            from.latitude,
+            from.longitude,
+            from.iconUrl,
+            DateTime(from.lastUpdatedAt)
+        )
+    }
+
+    fun mapFrom(from: WeatherEntity): WeatherRoomEntity {
+        return WeatherRoomEntity(
+                from.id,
+                from.city,
+                from.temperature,
+                from.condition,
+                from.wind,
+                from.windDirection.toString(),
+                from.latitude,
+                from.longitude,
+                from.iconUrl,
+                from.lastUpdatedAt.millis
+        )
+    }
     /**
      * Convert kelvin to celcius
      * @param kelvin - temp in kelvin
@@ -54,6 +88,19 @@ class WeatherEntityMapper @Inject constructor() : Mapper<WeatherResponse, Weathe
             windDegree >= 270 && windDegree < 315 -> WindDirection.West
             windDegree >= 315 && windDegree < 360 -> WindDirection.NorthWest
             else -> WindDirection.North
+        }
+    }
+
+    private fun mapDirection(direction: String): WindDirection {
+        return when (direction) {
+            WindDirection.NorthEast.toString() ->  WindDirection.NorthEast
+            WindDirection.East.toString() ->  WindDirection.East
+            WindDirection.SouthEast.toString() ->  WindDirection.SouthEast
+            WindDirection.South.toString() ->  WindDirection.South
+            WindDirection.SouthWest.toString() ->  WindDirection.SouthWest
+            WindDirection.West.toString() ->  WindDirection.West
+            WindDirection.NorthWest.toString() ->  WindDirection.NorthWest
+            else -> throw IllegalArgumentException("Something went wrong!")
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ashley.data.weather
 
+import com.ashley.data.ErrorMapper
 import com.ashley.data.utils.MockDataHelper
 import com.ashley.data.weather.remote.WeatherRemoteRepositoryImpl
 import com.ashley.data.weather.remote.WeatherService
@@ -19,11 +20,13 @@ class WeatherRemoteRepositoryImplTest {
 
     private lateinit var weatherRemoteRepositoryImpl: WeatherRemoteRepositoryImpl
     private val weatherService: WeatherService = mock()
+    private val weatherEntityMapper: WeatherEntityMapper = WeatherEntityMapper()
+    private val errorMapper: ErrorMapper = ErrorMapper()
     private val weatherResponse: WeatherResponse = MockDataHelper.getWeatherResponse()
 
     @Before
     fun setUp() {
-        weatherRemoteRepositoryImpl = WeatherRemoteRepositoryImpl(weatherService)
+        weatherRemoteRepositoryImpl = WeatherRemoteRepositoryImpl(weatherService, weatherEntityMapper, errorMapper)
     }
 
     @Test
