@@ -20,6 +20,8 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyDouble
 import org.mockito.junit.MockitoJUnitRunner
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(MockitoJUnitRunner::class)
 class MainViewModelTest {
@@ -57,6 +59,31 @@ class MainViewModelTest {
                 .assertNever { it is ScreenState.NoWifiState }
                 .assertNever { it is ScreenState.Error }
                 .assertNever { it is ScreenState.EmptyState }
+
+        verify(getWeatherUseCase).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(navigator, never()).requestPermissions(any())
+    }
+
+    @Test fun testLoadWeatherData_LoadingIndicators() {
+        whenever(locationHandler.listen()).thenReturn(Single.just(MockDataHelper.getLocation()))
+        whenever(getWeatherUseCase.getWeatherByCoords(anyDouble(), anyDouble()))
+                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
+
+        val testObserver = mainViewModel.screenState.test()
+
+        mainViewModel.onStart(lifecycleOwner)
+
+        testObserver.assertHistorySize(3)
+
+        val screenStates = testObserver.valueHistory()
+        assertTrue { screenStates[0] is ScreenState.LoadingState }
+        val loadingSpinner1 = screenStates[0] as ScreenState.LoadingState
+        assertTrue { loadingSpinner1.isLoading }
+        assertTrue { screenStates[1] is ScreenState.LoadingState }
+        val loadingSpinner2 = screenStates[1] as ScreenState.LoadingState
+        assertFalse { loadingSpinner2.isLoading }
+        assertTrue { screenStates[2] is ScreenState.HasData }
+
 
         verify(getWeatherUseCase).getWeatherByCoords(anyDouble(), anyDouble())
         verify(navigator, never()).requestPermissions(any())
