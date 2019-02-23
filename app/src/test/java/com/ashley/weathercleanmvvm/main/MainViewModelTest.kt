@@ -129,8 +129,6 @@ class MainViewModelTest {
 
     @Test fun testLoadWeatherData_LocationPermissionsNeeded() {
         whenever(locationHandler.listen()).thenReturn(Single.error(WeatherExceptions.LocationRequestNotGrantedException()))
-        whenever(getWeatherUseCase.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
         whenever(locationHandler.locationPermissions()).thenReturn(arrayOf("permissions"))
 
         mainViewModel.onStart(lifecycleOwner)
