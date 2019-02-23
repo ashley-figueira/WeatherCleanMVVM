@@ -12,7 +12,6 @@ import com.ashley.weathercleanmvvm.base.ScreenState
 import com.ashley.weathercleanmvvm.common.FusedLocationHandler
 import com.ashley.weathercleanmvvm.common.NetworkConnectivityHandler
 import com.ashley.weathercleanmvvm.common.WeatherExceptions
-import io.reactivex.functions.Consumer
 import timber.log.Timber
 
 class MainViewModel(
@@ -31,21 +30,24 @@ class MainViewModel(
     }
 
     fun loadWeatherData() {
-        try {
-            locationHandler.getUsersCurrentLocation(Consumer { location ->
-                getWeatherUseCase.getWeatherByCoords(location.latitude, location.longitude)
-                    .doOnSubscribe { _screenState.value = ScreenState.LoadingState(true) }
-                    .doOnSuccess { _screenState.value = ScreenState.LoadingState(false) }
-                    .subscribe({ result ->
-                        when (result) {
-                            is WResult.Success -> _screenState.value = ScreenState.HasData(result.data)
-                            is WResult.Failure -> handleError(result.error)
-                        }
-                    }, { throwable -> Timber.e(throwable) }).addToComposite()
+        locationHandler
+            .listen()
+            .flatMap { getWeatherUseCase.getWeatherByCoords(it[0], it[1]) }
+            .doOnSubscribe { _screenState.value = ScreenState.LoadingState(true) }
+            .doOnSuccess { _screenState.value = ScreenState.LoadingState(false) }
+            .subscribe({ result ->
+                when (result) {
+                    is WResult.Success -> _screenState.value = ScreenState.HasData(result.data)
+                    is WResult.Failure -> handleError(result.error)
+                }
+            }, { throwable ->
+                if (throwable is WeatherExceptions.LocationRequestNotGrantedException) {
+                    mNavigator.requestPermissions(locationHandler.locationPermissions())
+                } else {
+                    Timber.e(throwable)
+                }
             })
-        } catch (error: WeatherExceptions.LocationRequestNotGrantedException) {
-            mNavigator.requestPermissions(locationHandler.locationPermissions())
-        }
+            .addToComposite()
     }
 
     fun onConnectToWifi() = mNavigator.goToWifiSettings()

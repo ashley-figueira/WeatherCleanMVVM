@@ -14,31 +14,31 @@ import javax.inject.Inject
 @PerApplication
 class NetworkConnectivityHandler @Inject constructor(@ApplicationContext context: Context) : ConnectivityManager.NetworkCallback() {
 
-    private val mNetworkPublisher : PublishSubject<Boolean> = PublishSubject.create()
-    private val mConnectivityManager : ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val networkPublisher : PublishSubject<Boolean> = PublishSubject.create()
+    private val connectivityManager : ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     init {
         val request = NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
                 .build()
-        mConnectivityManager.registerNetworkCallback(request, this)
+        connectivityManager.registerNetworkCallback(request, this)
     }
 
     fun hasNetworkConnectivity(): Boolean {
-        val activeNetworkInfo = mConnectivityManager.activeNetworkInfo
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
-    fun listen(): Observable<Boolean> = mNetworkPublisher
+    fun listen(): Observable<Boolean> = networkPublisher
 
     override fun onAvailable(network: Network?) {
         super.onAvailable(network)
-        mNetworkPublisher.onNext(true)
+        networkPublisher.onNext(true)
     }
 
     override fun onLost(network: Network?) {
         super.onLost(network)
-        mNetworkPublisher.onNext(false)
+        networkPublisher.onNext(false)
     }
 }

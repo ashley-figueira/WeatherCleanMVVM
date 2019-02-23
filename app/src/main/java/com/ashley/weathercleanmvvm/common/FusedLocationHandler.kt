@@ -8,24 +8,29 @@ import com.ashley.domain.di.ApplicationContext
 import com.ashley.domain.di.PerApplication
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import io.reactivex.functions.Consumer
+import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 import pub.devrel.easypermissions.EasyPermissions
-import pub.devrel.easypermissions.PermissionRequest
 import javax.inject.Inject
 
+@SuppressLint("MissingPermission")
 @PerApplication
 class FusedLocationHandler @Inject constructor(@ApplicationContext private val context: Context) {
 
+    private val fusedLocationPublisher : SingleSubject<Array<Double>> = SingleSubject.create()
     private var fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
-    @SuppressLint("MissingPermission")
-    fun getUsersCurrentLocation(listener: Consumer<Location>) {
+    init {
         if (EasyPermissions.hasPermissions(context, *locationPermissions())) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                listener.accept(location)
+                fusedLocationPublisher.onSuccess(arrayOf(location.latitude, location.longitude))
             }
-        } else throw WeatherExceptions.LocationRequestNotGrantedException()
+        } else {
+            fusedLocationPublisher.onError(WeatherExceptions.LocationRequestNotGrantedException())
+        }
     }
+
+    fun listen(): Single<Array<Double>> = fusedLocationPublisher
 
     fun locationPermissions() : Array<String> {
         return arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)

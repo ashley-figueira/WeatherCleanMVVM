@@ -43,7 +43,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), MainNav
                     weatherWind.text = "${screenState.data.wind} m/s"
                     weatherCity.text = screenState.data.city
                     weatherWindDirection.text = getString(screenState.data.windDirection.getStringRes())
-                    screenState.data.lastUpdatedAt?.let { weatherUpdatedOn.text = it.getFormattedDate() }
+                    weatherUpdatedOn.text = screenState.data.lastUpdatedAt.getFormattedDate()
                     Glide.with(this).load(screenState.data.iconUrl).into(weatherIcon)
                 }
             }

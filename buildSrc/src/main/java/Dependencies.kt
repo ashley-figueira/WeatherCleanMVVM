@@ -45,6 +45,8 @@ object Versions {
     const val mockito_kotlin = "1.5.0"
     const val support_test_runner = "1.1.0"
     const val support_espresso = "3.1.0"
+
+    const val live_data_test = "1.0.0"
 }
 
 object Dependencies {
@@ -118,6 +120,7 @@ object Dependencies {
 
     // TEST
     const val junit = "junit:junit:${Versions.junit}"
+    const val live_data_test = "com.jraska.livedata:testing-ktx:${Versions.live_data_test}"
 
     const val kotlin_test_runtime = "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}"
     const val kotlin_test_reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"

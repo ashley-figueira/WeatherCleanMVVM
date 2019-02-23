@@ -97,6 +97,8 @@ dependencies {
     implementation Dependencies.stetho
 
     testImplementation Dependencies.junit
+    testImplementation Dependencies.live_data_test
+    testImplementation Dependencies.andoridx_arch_testing
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.kotlin_test_runtime
