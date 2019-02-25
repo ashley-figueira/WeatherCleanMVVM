@@ -3,13 +3,11 @@ package com.ashley.data.weather
 import com.ashley.data.ErrorMapper
 import com.ashley.data.weather.local.WeatherLocalRepository
 import com.ashley.data.weather.remote.WeatherRemoteRepository
-import com.ashley.domain.common.WError
 import com.ashley.domain.common.WResult
 import com.ashley.domain.extensions.isOutOfDate
 import com.ashley.domain.weather.WeatherEntity
 import com.ashley.domain.weather.WeatherRepository
 import io.reactivex.Single
-import org.joda.time.DateTime
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -30,6 +28,6 @@ class WeatherRepositoryImpl @Inject constructor(
         return Single.concat(cache, networkWithSave)
                 .filter { it is WResult.Success && it.data.lastUpdatedAt.isOutOfDate().not() }
                 .firstOrError()
-                .onErrorReturn { WResult.Failure(errorMapper.mapFrom(it)) }
+                .onErrorResumeNext { networkWithSave }
     }
 }
