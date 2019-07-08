@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 
 androidExtensions {
     experimental = true
@@ -36,39 +38,33 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(":data")
-
-    kapt 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
-    annotationProcessor 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta02'
+    implementation project(':domain')
+    implementation project(':data')
 
     implementation Dependencies.kotlin
-
-    implementation Dependencies.material_design
-    implementation Dependencies.androidx_card_view
-    implementation Dependencies.androidx_multidex
-    implementation Dependencies.androidx_constraint_layout
     implementation Dependencies.androidx_appcompat
+    implementation Dependencies.androidx_core
+    implementation Dependencies.androidx_card_view
+    implementation Dependencies.androidx_constraint_layout
+    implementation Dependencies.androidx_multidex
+    implementation Dependencies.androidx_nav_fragment_ktx
+    implementation Dependencies.androidx_nav_ui_ktx
+    implementation Dependencies.material_design
 
-    //arch
-    implementation Dependencies.andoridx_arch_viewModel
-    implementation Dependencies.andoridx_arch_extensions
-    implementation Dependencies.andoridx_arch_liveData
-    implementation Dependencies.andoridx_arch_java8
-    implementation Dependencies.andoridx_arch_room_runtime
-    implementation Dependencies.andoridx_arch_room_rxjava
-    kapt Dependencies.andoridx_arch_room_compiler
+    //Android arch
+    implementation Dependencies.androidx_arch_viewModel
+    implementation Dependencies.androidx_arch_extensions
+    implementation Dependencies.androidx_arch_liveData
+    implementation Dependencies.androidx_arch_java8
 
     //Dagger
     implementation Dependencies.dagger
-    implementation Dependencies.dagger_android
     implementation Dependencies.dagger_support
     kapt Dependencies.dagger_compiler
     kapt Dependencies.dagger_processor
 
     //Network
     implementation Dependencies.okhttp
-    implementation Dependencies.okhttp_logging
     implementation Dependencies.retrofit
     implementation Dependencies.retrofit_gson_coverter
     implementation Dependencies.retrofit_rxjava_adapter
@@ -77,32 +73,49 @@ dependencies {
     //rx
     implementation Dependencies.rxjava
     implementation Dependencies.rxandroid
+    implementation Dependencies.rxrelay
+
+    //Groupie
+    implementation Dependencies.groupie
+    implementation Dependencies.groupie_extensions
 
     //Glide
     implementation Dependencies.glide
     implementation Dependencies.glide_okhttp_integration
+    kapt Dependencies.glideCompiler
 
-    //Picasso
-    implementation Dependencies.picasso
+    //Joda
+    implementation Dependencies.joda
 
     //Debug tools
     implementation Dependencies.timber
 
-    //others
-    implementation Dependencies.groupie
-    implementation Dependencies.groupie_extensions
-    implementation Dependencies.easypermissions
-    implementation Dependencies.play_services_location
-
-    implementation Dependencies.stetho
-
     testImplementation Dependencies.junit
-    testImplementation Dependencies.live_data_test
-    testImplementation Dependencies.andoridx_arch_testing
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.kotlin_test_runtime
     testImplementation Dependencies.kotlin_test_reflect
     testImplementation Dependencies.kotlin_test_junit
+    testImplementation Dependencies.androidx_arch_testing
+    testImplementation Dependencies.live_data_test
+
+    debugImplementation Dependencies.androidx_fragment_testing
+    debugImplementation Dependencies.androidx_test_core
+
+    androidTestImplementation Dependencies.dagger
+    androidTestImplementation Dependencies.dagger_support
+    kaptAndroidTest Dependencies.dagger_compiler
+    kaptAndroidTest Dependencies.dagger_processor
+
+    androidTestImplementation Dependencies.junit
+    androidTestImplementation Dependencies.mockito
+    androidTestImplementation Dependencies.mockito_android
+    androidTestImplementation Dependencies.mock_webserver
+    androidTestImplementation Dependencies.androidx_test_runner
+    androidTestImplementation Dependencies.androidx_test_rules
+    androidTestImplementation Dependencies.androidx_junit
+    androidTestImplementation Dependencies.androidx_truth
+    androidTestImplementation Dependencies.androidx_espresso_core
+    androidTestImplementation Dependencies.androidx_espresso_contrib
 
 }

@@ -1,10 +1,10 @@
 package com.ashley.data.weather
 
 import androidx.room.EmptyResultSetException
-import com.ashley.data.ErrorMapper
+import com.ashley.data.common.ErrorMapper
 import com.ashley.data.utils.MockDataHelper
-import com.ashley.data.weather.local.WeatherLocalRepository
-import com.ashley.data.weather.remote.WeatherRemoteRepository
+import com.ashley.data.weather.local.WeatherDao
+import com.ashley.data.weather.remote.WeatherService
 import com.ashley.domain.common.WError
 import com.ashley.domain.common.WResult
 import com.nhaarman.mockito_kotlin.*
@@ -14,115 +14,91 @@ import org.joda.time.DateTime
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyDouble
-import kotlin.test.assertTrue
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.junit.MockitoJUnitRunner
+import java.net.UnknownHostException
 
+@RunWith(MockitoJUnitRunner::class)
 class WeatherRepositoryImplTest {
 
     private lateinit var weatherRepository: WeatherRepositoryImpl
-    private val weatherRemoteRepository: WeatherRemoteRepository = mock()
-    private val weatherLocalRepository: WeatherLocalRepository = mock()
+    private val weatherDao: WeatherDao = mock()
+    private val weatherService: WeatherService = mock()
     private val weatherEntityMapper: WeatherEntityMapper = WeatherEntityMapper()
     private val errorMapper: ErrorMapper = ErrorMapper()
 
     @Before
     fun setUp() {
-        weatherRepository = WeatherRepositoryImpl(weatherRemoteRepository, weatherLocalRepository, weatherEntityMapper, errorMapper)
+        whenever(weatherDao.insertWeather(any())).thenReturn(Completable.complete())
+        whenever(weatherDao.getWeatherByCoords(anyDouble(), anyDouble())).thenReturn(Single.just(MockDataHelper.getWeatherRoomEntity()))
+        whenever(weatherService.getWeatherByCoords(anyDouble(), anyDouble(), anyString())).thenReturn(Single.just(MockDataHelper.getWeatherResponse()))
+
+        weatherRepository = WeatherRepositoryImpl(weatherDao, weatherService, weatherEntityMapper, errorMapper)
     }
 
     @After
     fun tearDown() {
-        verifyNoMoreInteractions(weatherRemoteRepository, weatherLocalRepository)
+        verifyNoMoreInteractions(weatherDao, weatherService)
     }
 
     @Test
-    fun testGetWeatherByCoords_WeHaveWeatherInDb() {
-        whenever(weatherLocalRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
-        whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
+    fun testGivenWeHaveWeatherInDb_thenWeDoNotGoToNetwork() {
 
-        val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValueCount(1) //Only database values where emitted
-        testObserver.assertValue { value -> value is WResult.Success }
+        weatherRepository.getWeatherByCoords(55.0, 55.5).test()
+            .assertNoErrors()
+            .assertValueCount(1) //Only database values where emitted
+            .assertValue { it is WResult.Success }
 
-        verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherRemoteRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherLocalRepository, never()).insertWeather(any()) //This is proof that it didnt go to network
-
-
+        verify(weatherDao).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(weatherService).getWeatherByCoords(anyDouble(), anyDouble(), anyString())
+        verify(weatherDao, never()).insertWeather(any()) //This is proof that it didnt go to network
     }
 
     @Test
-    fun testGetWeatherByCoords_weatherInDbIsOutOfDate_fetchFromNetwork() {
+    fun testGivenWeatherInDbIsOutOfDate_thenReturnFromNetwork_andSaveToDb() {
+        whenever(weatherDao.getWeatherByCoords(anyDouble(), anyDouble())).thenReturn(Single.just(MockDataHelper.getWeatherRoomEntity(DateTime.now().minusDays(2))))
 
-        whenever(weatherLocalRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity(DateTime(2018, 12, 1,0,0)))))
+        weatherRepository.getWeatherByCoords(55.0, 55.5).test()
+            .assertNoErrors()
+            .assertValueCount(1) //Only network values where emitted
+            .assertValue { it is WResult.Success }
 
-        whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
-
-        whenever(weatherLocalRepository.insertWeather(any())).thenReturn(Completable.complete())
-
-        val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValueCount(1) //Only network values where emitted
-        testObserver.assertValue { value -> value is WResult.Success }
-
-        verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherRemoteRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherLocalRepository).insertWeather(any())
+        verify(weatherDao).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(weatherService).getWeatherByCoords(anyDouble(), anyDouble(), anyString())
+        verify(weatherDao).insertWeather(any())
 
     }
 
     @Test
-    fun testGetWeatherByCoords_WeHaveNoWeatherInDb_fetchFromNetwork() {
-        whenever(weatherLocalRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Failure(WError.NoWeatherInDatabase(EmptyResultSetException("No weather in database!")))))
+    fun testGivenWeHaveNoWeatherInDb_thenReturnFromNetwork_andSaveToDb() {
+        whenever(weatherDao.getWeatherByCoords(anyDouble(), anyDouble())).thenReturn(Single.error(EmptyResultSetException("No events in database!")))
 
-        whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Success(MockDataHelper.getWeatherEntity())))
+        weatherRepository.getWeatherByCoords(55.0, 55.5).test()
+            .assertNoErrors()
+            .assertValueCount(1) //Only network values where emitted
+            .assertValue { it is WResult.Success }
 
-        whenever(weatherLocalRepository.insertWeather(any())).thenReturn(Completable.complete())
-
-        val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValueCount(1) //Only network values where emitted
-        testObserver.assertValue { value -> value is WResult.Success }
-
-        verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherRemoteRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherLocalRepository).insertWeather(any())
+        verify(weatherDao).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(weatherService).getWeatherByCoords(anyDouble(), anyDouble(), anyString())
+        verify(weatherDao).insertWeather(any())
     }
 
     @Test
-    fun testGetWeatherByCoords_offline() {
+    fun testGivenWeAreOfflineAndHaveNoWeatherInDb_thenReturnAnOfflineError() {
+        whenever(weatherDao.getWeatherByCoords(anyDouble(), anyDouble())).thenReturn(Single.error(EmptyResultSetException("No events in database!")))
+        whenever(weatherService.getWeatherByCoords(anyDouble(), anyDouble(), anyString())).thenReturn(Single.error(UnknownHostException()))
 
-        whenever(weatherLocalRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Failure(WError.NoWeatherInDatabase(EmptyResultSetException("No weather in database!")))))
 
-        whenever(weatherRemoteRepository.getWeatherByCoords(anyDouble(), anyDouble()))
-                .thenReturn(Single.just(WResult.Failure(WError.Offline(Exception()))))
+        weatherRepository.getWeatherByCoords(55.0, 55.5).test()
+            .assertNoErrors()
+            .assertValueCount(1) //Only network values where emitted
+            .assertValue { it is WResult.Failure && it.error is WError.Offline }
 
-        whenever(weatherLocalRepository.insertWeather(any())).thenReturn(Completable.complete())
-
-        val testObserver = weatherRepository.getWeatherByCoords(55.0, 55.5).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValueCount(1) //Only network values where emitted
-        testObserver.assertValue { value -> value is WResult.Failure }
-
-        val value = testObserver.events[0][0] as WResult.Failure<*>
-
-        assertTrue { value.error is WError.Offline }
-
-        verify(weatherLocalRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherRemoteRepository).getWeatherByCoords(anyDouble(), anyDouble())
-        verify(weatherLocalRepository, never()).insertWeather(any())
+        verify(weatherDao).getWeatherByCoords(anyDouble(), anyDouble())
+        verify(weatherService).getWeatherByCoords(anyDouble(), anyDouble(), anyString())
+        verify(weatherDao, never()).insertWeather(any())
 
     }
 }

@@ -1,7 +1,6 @@
 package com.ashley.data.weather.remote
 
 import com.ashley.data.BuildConfig
-import com.ashley.data.weather.WeatherResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query

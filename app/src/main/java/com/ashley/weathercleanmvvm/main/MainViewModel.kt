@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ashley.domain.common.WError
 import com.ashley.domain.common.WResult
-import com.ashley.domain.weather.GetWeatherUseCase
+import com.ashley.domain.usecases.GetWeatherUseCase
 import com.ashley.weathercleanmvvm.R
 import com.ashley.weathercleanmvvm.base.BaseViewModel
 import com.ashley.weathercleanmvvm.base.ScreenState

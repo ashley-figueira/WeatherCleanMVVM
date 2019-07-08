@@ -1,8 +1,9 @@
-package com.ashley.domain.weather
+package com.ashley.domain.usecases
 
 import com.ashley.domain.common.TestSchedulerProvider
 import com.ashley.domain.common.WError
 import com.ashley.domain.common.WResult
+import com.ashley.domain.repositories.WeatherRepository
 import com.ashley.domain.utils.MockDomainHelper
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -12,7 +13,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyDouble
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.junit.MockitoJUnitRunner
 import java.net.SocketException
 
@@ -32,10 +32,10 @@ class GetWeatherUseCaseTest {
         whenever(weatherRepository.getWeatherByCoords(anyDouble(), anyDouble()))
                 .thenReturn(Single.just(WResult.Success(MockDomainHelper.getWeatherEntity())))
 
-        val testObserver = getWeatherUseCase.getWeatherByCoords(50.0, 44.4).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValue { value -> value is WResult.Success }
+        getWeatherUseCase(50.0, 44.4).test()
+            .assertNoErrors()
+            .assertComplete()
+            .assertValue { value -> value is WResult.Success }
 
         verify(weatherRepository).getWeatherByCoords(anyDouble(), anyDouble())
     }
@@ -45,10 +45,10 @@ class GetWeatherUseCaseTest {
         whenever(weatherRepository.getWeatherByCoords(anyDouble(), anyDouble()))
                 .thenReturn(Single.just(WResult.Failure(WError.Offline(SocketException()))))
 
-        val testObserver = getWeatherUseCase.getWeatherByCoords(50.0, 44.4).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValue { value -> value is WResult.Failure }
+        getWeatherUseCase(50.0, 44.4).test()
+            .assertNoErrors()
+            .assertComplete()
+            .assertValue { value -> value is WResult.Failure }
 
         verify(weatherRepository).getWeatherByCoords(anyDouble(), anyDouble())
     }

@@ -1,4 +1,5 @@
 apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation Dependencies.kotlin
@@ -6,6 +7,9 @@ dependencies {
     implementation Dependencies.joda
     implementation Dependencies.javaxAnnotation
     implementation Dependencies.javaxInject
+
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_inline

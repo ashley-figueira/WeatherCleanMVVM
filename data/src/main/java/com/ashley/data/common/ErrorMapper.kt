@@ -1,4 +1,4 @@
-package com.ashley.data
+package com.ashley.data.common
 
 import androidx.room.EmptyResultSetException
 import com.ashley.domain.common.Mapper

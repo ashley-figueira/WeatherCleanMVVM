@@ -1,7 +1,7 @@
 package com.ashley.weathercleanmvvm.base
 
 import androidx.annotation.StringRes
-import com.ashley.domain.weather.WeatherEntity
+import com.ashley.domain.usecases.WeatherEntity
 
 sealed class ScreenState {
 

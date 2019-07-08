@@ -1,10 +1,11 @@
 package com.ashley.data.weather
 
-import com.ashley.data.DataConfig
+import com.ashley.data.common.DataConfig
 import com.ashley.data.weather.local.WeatherRoomEntity
+import com.ashley.data.weather.remote.WeatherResponse
 import com.ashley.domain.common.Mapper
-import com.ashley.domain.weather.WeatherEntity
-import com.ashley.domain.weather.WindDirection
+import com.ashley.domain.entities.WeatherEntity
+import com.ashley.domain.entities.WindDirection
 import org.joda.time.DateTime
 import java.lang.Float.parseFloat
 import java.text.DecimalFormat
@@ -25,31 +26,31 @@ class WeatherEntityMapper @Inject constructor() : Mapper<WeatherResponse, Weathe
         val longitude = from.coord?.lon ?: throw IllegalArgumentException("Weather coordinates does not exist!")
 
         return WeatherEntity(
-            id.toLong(),
-            city,
-            convertKelvinInCelsius(temperature),
-            condition,
-            wind,
-            convertDegreesToDirection(windDirection),
-            latitude,
-            longitude,
-            iconUrl,
-            lastUpdatedAt
+                id.toLong(),
+                city,
+                convertKelvinInCelsius(temperature),
+                condition,
+                wind,
+                convertDegreesToDirection(windDirection),
+                latitude,
+                longitude,
+                iconUrl,
+                lastUpdatedAt
         )
     }
 
     fun mapFrom(from: WeatherRoomEntity): WeatherEntity {
         return WeatherEntity(
-            from.id,
-            from.city,
-            from.temperature,
-            from.condition,
-            from.wind,
-            mapDirection(from.windDirection),
-            from.latitude,
-            from.longitude,
-            from.iconUrl,
-            DateTime(from.lastUpdatedAt)
+                from.id,
+                from.city,
+                from.temperature,
+                from.condition,
+                from.wind,
+                mapDirection(from.windDirection),
+                from.latitude,
+                from.longitude,
+                from.iconUrl,
+                DateTime(from.lastUpdatedAt)
         )
     }
 

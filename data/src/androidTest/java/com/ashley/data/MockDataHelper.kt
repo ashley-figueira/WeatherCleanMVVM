@@ -1,9 +1,9 @@
 package com.ashley.data
 
-import com.ashley.data.weather.WeatherResponse
+import com.ashley.data.weather.remote.WeatherResponse
 import com.ashley.data.weather.local.WeatherRoomEntity
-import com.ashley.domain.weather.WeatherEntity
-import com.ashley.domain.weather.WindDirection
+import com.ashley.domain.entities.WeatherEntity
+import com.ashley.domain.entities.WindDirection
 import com.google.gson.Gson
 import org.joda.time.DateTime
 
@@ -18,7 +18,7 @@ class MockDataHelper {
 
         fun getWeatherResponse(): WeatherResponse = Gson().fromJson(json, WeatherResponse::class.java)
 
-        fun getWeatherEntity(dateTime: DateTime = DateTime.now()) = WeatherEntity(1234, "London", 20.5f, "Sunny", 60.0, WindDirection.NorthEast, 55.0, 50.0,"iconUrl", dateTime)
+        fun getWeatherEntity(dateTime: DateTime = DateTime.now()) = WeatherEntity(1234, "London", 20.5f, "Sunny", 60.0, WindDirection.NorthEast, 55.0, 50.0, "iconUrl", dateTime)
 
         fun getWeatherRoomEntity(dateTime: DateTime = DateTime.now()) = WeatherRoomEntity(1234, "London", 20.5f, "Sunny", 60.0, WindDirection.NorthEast.toString(), 55.0,50.5, "iconUrl", dateTime.millis)
     }

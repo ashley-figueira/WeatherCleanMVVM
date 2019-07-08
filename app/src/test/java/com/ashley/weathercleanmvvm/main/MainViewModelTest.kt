@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LifecycleOwner
 import com.ashley.domain.common.WError
 import com.ashley.domain.common.WResult
-import com.ashley.domain.weather.GetWeatherUseCase
+import com.ashley.domain.usecases.GetWeatherUseCase
 import com.ashley.weathercleanmvvm.base.ScreenState
 import com.ashley.weathercleanmvvm.common.FusedLocationHandler
 import com.ashley.weathercleanmvvm.common.NetworkConnectivityHandler

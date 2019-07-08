@@ -10,9 +10,6 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWeather(weather: WeatherRoomEntity): Completable
 
-    @Query("SELECT * from Weather where city = :city")
-    fun getWeatherByCity(city: String): Single<WeatherRoomEntity>
-
     @Query("SELECT * from Weather where lat = :lat AND lon = :lon")
     fun getWeatherByCoords(lat: Double, lon: Double): Single<WeatherRoomEntity>
 

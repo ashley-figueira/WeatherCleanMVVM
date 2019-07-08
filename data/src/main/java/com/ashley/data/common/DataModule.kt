@@ -1,20 +1,18 @@
-package com.ashley.data
+package com.ashley.data.common
 
 import android.content.Context
 import androidx.room.Room
-import com.ashley.data.weather.WeatherRepositoryImpl
 import com.ashley.data.weather.local.WeatherDao
 import com.ashley.data.weather.local.WeatherDatabase
 import com.ashley.data.weather.remote.WeatherService
 import com.ashley.domain.di.ApplicationContext
 import com.ashley.domain.di.PerApplication
-import com.ashley.domain.weather.WeatherRepository
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

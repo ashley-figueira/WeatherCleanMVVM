@@ -32,10 +32,9 @@ class WeatherDatabaseTest {
     fun testInsertWeather() {
         val weatherRoomEntity = MockDataHelper.getWeatherRoomEntity()
 
-        val testObserver = weatherDatabase.weatherDao().insertWeather(weatherRoomEntity).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertComplete()
-        testObserver.assertNoErrors()
+        weatherDatabase.weatherDao().insertWeather(weatherRoomEntity).test()
+            .assertComplete()
+            .assertNoErrors()
     }
 
     @Test
@@ -45,9 +44,8 @@ class WeatherDatabaseTest {
         //we need to wait that it finishes inserting the weather before we test the get
         weatherDatabase.weatherDao().insertWeather(weatherRoomEntity).test().awaitTerminalEvent()
 
-        val testObserver = weatherDatabase.weatherDao().getWeatherByCoords(51.51, -0.13).test()
-        testObserver.awaitTerminalEvent()
-        testObserver.assertNoErrors()
-        testObserver.assertValueCount(1)
+        weatherDatabase.weatherDao().getWeatherByCoords(51.51, -0.13).test()
+            .assertNoErrors()
+            .assertValueCount(1)
     }
 }

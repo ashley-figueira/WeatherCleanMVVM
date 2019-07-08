@@ -1,4 +1,4 @@
-package com.ashley.data
+package com.ashley.data.common
 
 object DataConfig {
     const val WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/"

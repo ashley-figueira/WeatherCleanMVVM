@@ -1,4 +1,4 @@
-package com.ashley.domain.weather
+package com.ashley.domain.entities
 
 sealed class WindDirection {
     object North : WindDirection()

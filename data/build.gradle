@@ -32,25 +32,24 @@ android {
 }
 
 dependencies {
+    implementation project(':domain')
+
     implementation Dependencies.kotlin
+    implementation Dependencies.timber
+    implementation Dependencies.joda
+    implementation Dependencies.rxjava
+    implementation Dependencies.rxSharedPrefernces
 
-    // A lot of these need to be api so that Dagger can build the dependencies in the app module.
-    api project(":domain")
+    implementation Dependencies.okhttp
+    implementation Dependencies.okhttp_logging
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson_coverter
+    implementation Dependencies.retrofit_rxjava_adapter
+    implementation Dependencies.gson
 
-    api Dependencies.joda
-    api Dependencies.okhttp
-    api Dependencies.okhttp_logging
-    api Dependencies.rxjava
-    api Dependencies.retrofit
-    api Dependencies.retrofit_gson_coverter
-    api Dependencies.retrofit_rxjava_adapter
-    api Dependencies.retrofit_rxjava2_adapter
-    api Dependencies.gson
-    api Dependencies.timber
-
-    api Dependencies.andoridx_arch_room_runtime
-    api Dependencies.andoridx_arch_room_rxjava
-    kapt Dependencies.andoridx_arch_room_compiler
+    api Dependencies.androidx_arch_room_runtime
+    implementation Dependencies.androidx_arch_room_rxjava
+    kapt Dependencies.androidx_arch_room_compiler
 
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
@@ -64,8 +63,8 @@ dependencies {
     testImplementation Dependencies.kotlin_test_junit
 
     androidTestImplementation Dependencies.junit
-    androidTestImplementation Dependencies.andoridx_arch_testing
-    androidTestImplementation Dependencies.andoridx_arch_room_testing
+    androidTestImplementation Dependencies.androidx_arch_testing
+    androidTestImplementation Dependencies.androidx_arch_room_testing
     androidTestImplementation Dependencies.support_test_runner
     androidTestImplementation Dependencies.support_test_rules
 }

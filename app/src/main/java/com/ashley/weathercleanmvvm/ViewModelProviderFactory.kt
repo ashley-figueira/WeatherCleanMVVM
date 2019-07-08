@@ -3,7 +3,7 @@ package com.ashley.weathercleanmvvm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ashley.domain.di.PerApplication
-import com.ashley.domain.weather.GetWeatherUseCase
+import com.ashley.domain.usecases.GetWeatherUseCase
 import com.ashley.weathercleanmvvm.common.FusedLocationHandler
 import com.ashley.weathercleanmvvm.common.NetworkConnectivityHandler
 import com.ashley.weathercleanmvvm.main.MainViewModel
