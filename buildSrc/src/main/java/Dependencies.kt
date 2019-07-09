@@ -117,7 +117,6 @@ object Dependencies {
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
     const val glide_okhttp_integration = "com.github.bumptech.glide:okhttp3-integration:${Versions.glide}@aar"
 
-
     //others
     const val joda = "joda-time:joda-time:${Versions.joda}"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"

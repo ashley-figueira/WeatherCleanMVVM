@@ -1,9 +1,9 @@
 package com.ashley.weathercleanmvvm.main
 
-import com.ashley.data.weather.WeatherResponse
 import com.ashley.data.weather.local.WeatherRoomEntity
-import com.ashley.domain.usecases.WeatherEntity
-import com.ashley.domain.usecases.WindDirection
+import com.ashley.data.weather.remote.WeatherResponse
+import com.ashley.domain.entities.WeatherEntity
+import com.ashley.domain.entities.WindDirection
 import com.google.gson.Gson
 import org.joda.time.DateTime
 

@@ -11,7 +11,6 @@ import com.ashley.weathercleanmvvm.base.ScreenAction
 import com.ashley.weathercleanmvvm.base.ScreenState
 import com.ashley.weathercleanmvvm.common.*
 import com.ashley.weathercleanmvvm.databinding.FragmentWeatherBinding
-import com.bumptech.glide.Glide
 import com.google.android.gms.location.LocationServices
 import com.jakewharton.rxrelay2.PublishRelay
 import com.tbruyelle.rxpermissions2.RxPermissions
