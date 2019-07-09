@@ -14,9 +14,11 @@ fun <T> Single<T>.compose(schedulerProvider: SchedulerProvider): Single<T> {
 fun <T> Single<WResult<T>>.doOnWeatherSuccess(onSuccess: ((T) -> Unit)) =
     doOnSuccess { if (it is WResult.Success) onSuccess.invoke(it.data) }
 
-fun <T> Single<WResult<T>>.subscribeWeatherResult(onSuccess: ((T) -> Unit), onError: ((WError) -> Unit)) =
-    subscribeWith(object : DisposableSingleObserver<WResult<T>>() {
-        override fun onSuccess(result: WResult<T>) {
+fun <T> Observable<WResult<T>>.subscribeWeatherResult(onSuccess: ((T) -> Unit), onError: ((WError) -> Unit)) =
+    subscribeWith(object : DisposableObserver<WResult<T>>() {
+        override fun onComplete() {}
+
+        override fun onNext(result: WResult<T>) {
             when (result) {
                 is WResult.Success -> onSuccess.invoke(result.data)
                 is WResult.Failure -> onError.invoke(result.error)

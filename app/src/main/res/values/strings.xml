@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Weather</string>
 
-    <string name="error_offline_message">You are offline</string>
     <string name="error_timeout_message">Request timed out</string>
     <string name="error_loading_failed_message">Loading data failed</string>
 
@@ -20,7 +19,7 @@
 
     <string name="main_screen_progress_loading_label">Loading ...</string>
     <string name="main_screen_empty_message">Sorry! You currently have no weather information to show!</string>
-    <string name="main_screen_no_wifi">You have no internet connection! Please turn on wifi or click here.</string>
+    <string name="main_screen_no_wifi">You have no internet connection! Please turn on wifi and swipe to refresh.</string>
     <string name="main_screen_unknown_error">Sorry something went wrong! Please try again!</string>
     <string name="main_screen_location_permission_message">Please grant location permissions to access weather for your current location</string>
 

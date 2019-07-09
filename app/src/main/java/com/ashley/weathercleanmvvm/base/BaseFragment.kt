@@ -43,6 +43,7 @@ abstract class BaseFragment<B : ViewDataBinding, V : BaseViewModel<*>> : DaggerF
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, getLayoutResId(), container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        initUi()
         return binding.root
     }
 
@@ -53,6 +54,8 @@ abstract class BaseFragment<B : ViewDataBinding, V : BaseViewModel<*>> : DaggerF
         viewModel.setLifeCycleOwner(this)
         getBindingVariableId()?.let { binding.setVariable(it, viewModel) }
     }
+
+    abstract fun initUi()
 
     override fun onDestroyView() {
         disposables.clear()
