@@ -1,26 +1,21 @@
 package com.ashley.weathercleanmvvm.base
 
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseViewModel<N : BaseNavigator> : ViewModel(), DefaultLifecycleObserver {
+abstract class BaseViewModel<V: ScreenState<*>> : ViewModel(), DefaultLifecycleObserver {
 
     private val disposable: CompositeDisposable = CompositeDisposable()
+    private val loadingMap: MutableMap<Any, Boolean> = mutableMapOf()
 
-    lateinit var mNavigator: N
-
-    val navigator : BaseNavigator
-        get() = mNavigator
+    protected val _screenState = MutableLiveData<V>()
+    val screenState: LiveData<V>
+        get() = _screenState
 
     fun setLifeCycleOwner(owner : LifecycleOwner) {
         owner.lifecycle.addObserver(this)
-    }
-
-    fun setNavigator(navigator : N) {
-        mNavigator = navigator
     }
 
     override fun onCleared() {
@@ -33,4 +28,26 @@ abstract class BaseViewModel<N : BaseNavigator> : ViewModel(), DefaultLifecycleO
         return this
     }
 
+    protected fun <T> Single<T>.addToLoadingState(): Single<T> {
+        return this
+                .doOnSubscribe {
+                    loadingMap[this] = true
+                    notifyLoadingState(loadingMap.any { it.value })
+                }
+                .doOnSuccess {
+                    loadingMap[this] = false
+                    notifyLoadingState(loadingMap.any { it.value })
+                }
+    }
+
+    protected open fun hideLoadingIndicator() { _screenState.value = ScreenState.loading<Any>(false) as V }
+    protected open fun showLoadingIndicator() { _screenState.value = ScreenState.loading<Any>(true) as V }
+
+    private fun notifyLoadingState(isLoading: Boolean) {
+        if (isLoading) {
+            showLoadingIndicator()
+        } else {
+            hideLoadingIndicator()
+        }
+    }
 }

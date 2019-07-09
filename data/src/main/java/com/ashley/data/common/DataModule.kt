@@ -43,15 +43,11 @@ class DataModule {
 
     @PerApplication
     @Provides
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor)
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor { message -> Timber.i(message)}.apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        })
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .build()
-
-
-    @Provides
-    @PerApplication
-    fun loggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor { message -> Timber.i(message) }
-        .setLevel(HttpLoggingInterceptor.Level.BODY)
 }

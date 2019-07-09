@@ -1,7 +1,8 @@
 package com.ashley.weathercleanmvvm.common
 
 import android.view.View
-import com.ashley.domain.usecases.WindDirection
+import com.ashley.domain.entities.WindDirection
+import com.ashley.weathercleanmvvm.R
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 

@@ -29,6 +29,7 @@ object Versions {
     const val dagger = "2.21"
     const val glide = "4.8.0"
 
+    const val play_services = "15.0.1"
 
     const val joda = "2.10.2"
     const val groupie = "2.3.0"
@@ -100,7 +101,10 @@ object Dependencies {
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}"
     const val rxrelay = "com.jakewharton.rxrelay2:rxrelay:2.1.0"
     const val rxSharedPrefernces = "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
+    const val rxPermissions = "com.github.tbruyelle:rxpermissions:0.10.2"
 
+    //player services
+    const val play_services_location = "com.google.android.gms:play-services-location:${Versions.play_services}"
 
     //dagger
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"

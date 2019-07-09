@@ -1,17 +1,19 @@
 package com.ashley.weathercleanmvvm.base
 
-import androidx.annotation.StringRes
-import com.ashley.domain.usecases.WeatherEntity
+sealed class ScreenState<T> {
 
-sealed class ScreenState {
+    class NoInternet<T> : ScreenState<T>()
+    data class Loading<T>(val isLoading: Boolean) : ScreenState<T>()
+    data class Error<T>(val errorMessage: Int) : ScreenState<T>()
+    data class Success<T>(var data: T) : ScreenState<T>()
 
-    class LoadingState(val isLoading: Boolean) : ScreenState()
+    companion object {
+        fun <T> noInternet(): ScreenState<T> = NoInternet()
 
-    object EmptyState : ScreenState()
+        fun <T> loading(isLoading: Boolean): ScreenState<T> = Loading(isLoading)
 
-    object NoWifiState : ScreenState()
+        fun <T> error(errorMessage: Int): ScreenState<T> = Error(errorMessage)
 
-    class HasData(val data: WeatherEntity) : ScreenState()
-
-    class Error(@StringRes val errorMessageId: Int) : ScreenState()
+        fun <T> success(data: T): ScreenState<T> = Success(data)
+    }
 }

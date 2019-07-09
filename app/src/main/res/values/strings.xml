@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Weather</string>
 
+    <string name="error_offline_message">You are offline</string>
+    <string name="error_timeout_message">Request timed out</string>
+    <string name="error_loading_failed_message">Loading data failed</string>
+
     <string name="main_screen_no_weather_item_message">No weather found!</string>
     <string name="main_screen_cardview_condition_label">Condition :</string>
     <string name="main_screen_cardview_wind_label">Wind :</string>

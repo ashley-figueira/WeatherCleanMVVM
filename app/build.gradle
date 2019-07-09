@@ -74,10 +74,9 @@ dependencies {
     implementation Dependencies.rxjava
     implementation Dependencies.rxandroid
     implementation Dependencies.rxrelay
+    implementation Dependencies.rxPermissions
 
-    //Groupie
-    implementation Dependencies.groupie
-    implementation Dependencies.groupie_extensions
+    implementation Dependencies.play_services_location
 
     //Glide
     implementation Dependencies.glide
