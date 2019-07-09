@@ -1,7 +1,10 @@
 package com.ashley.weathercleanmvvm.common
 
 import android.view.View
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import com.ashley.domain.entities.WindDirection
+import com.ashley.weathercleanmvvm.GlideApp
 import com.ashley.weathercleanmvvm.R
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -28,3 +31,11 @@ fun WindDirection.getStringRes(): Int {
 fun DateTime.getFormattedDate(): String = DateTimeFormat.forPattern(DATE_FORMAT).print(this)
 
 private const val DATE_FORMAT = "MMMM dd yyyy HH:mm"
+
+fun ImageView.load(url: String, @DrawableRes placeholder: Int) {
+    GlideApp.with(this)
+        .load(url)
+        .placeholder(placeholder)
+        .error(placeholder)
+        .into(this)
+}

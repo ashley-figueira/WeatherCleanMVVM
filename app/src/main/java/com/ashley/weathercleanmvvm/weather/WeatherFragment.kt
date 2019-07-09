@@ -54,8 +54,7 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding, WeatherViewModel>()
                     weatherCity.text = screenState.data.city
                     weatherWindDirection.text = getString(screenState.data.windDirection.getStringRes())
                     weatherUpdatedOn.text = screenState.data.lastUpdatedAt.getFormattedDate()
-                    Glide.with(this).load(screenState.data.iconUrl).into(weatherIcon)
-
+                    weatherIcon.load(screenState.data.iconUrl, R.drawable.ic_error)
                 }
             }
         })

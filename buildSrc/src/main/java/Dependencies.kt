@@ -27,7 +27,7 @@ object Versions {
     const val rxandroid = "2.1.1"
     const val gson = "2.8.2"
     const val dagger = "2.21"
-    const val glide = "4.8.0"
+    const val glide = "4.9.0"
 
     const val play_services = "15.0.1"
 
